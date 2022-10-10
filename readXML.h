@@ -44,6 +44,7 @@ string MatchingIdAndName(int id_for_name)
     }
 }
 
+//Сохранение результатов в файл
 void SavingResultsToAFile()
 {
     ofstream fout; // объект класса ofstream
@@ -73,7 +74,6 @@ void SearchSuperiorsOfTheDesiredEmployee(XMLElement* node, int findid)
     //Пока не конец документа(есть элементы)???????????????????
     while (node != NULL)
     {
-
         string element = string((char*)node->Value());//преобразование char в string?????????????
         //Если название элемента есть "Department"
         if (element == "Department")
@@ -137,10 +137,9 @@ void SearchSuperiorsOfTheDesiredEmployee(XMLElement* node, int findid)
         }
         node = node->NextSiblingElement();//Переход к следующему элементу
     }
-
 }
 
-
+//проверка данных из txt-файла
 bool isdigit(string s)
 {
     for (int i = 0; i < s.length(); i++)
