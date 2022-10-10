@@ -22,7 +22,6 @@ vector <Person> person;
 /*!Функция сопоставления id и ФИО
 *
 * \param[in] id-сотрудника(текущее)
-*
 * return значение ФИО соответствующее его id
 */
 string MatchingIdAndName(int id_for_name)
@@ -41,8 +40,26 @@ string MatchingIdAndName(int id_for_name)
     }
     catch (int e)
     {
-        if (e == 1) { cout << "Id no match"; }
+        if (e == 1) { cout << "Invalid employee id. Perhaps it doesn't exist."; }
     }
+}
+
+void SavingResultsToAFile()
+{
+    ofstream fout; // объект класса ofstream
+    fout.open("output.txt", std::ios::app);
+    for (int i = headers.size() - 2; i >= 0; i--)
+    {
+        //Если сотрудник присутствует на рабочем месте, записываем его в выходной файл
+        if (habsent[i])
+        {
+            //Записываем сотрудника в выходной файл
+            fout << MatchingIdAndName(headers[i]) << endl;
+        }
+    }
+    //Закрытие файла
+    fout.close();
+
 }
 
 /*!
@@ -50,8 +67,6 @@ string MatchingIdAndName(int id_for_name)
 *
 * \param [in] node - указатель на элемент в XML-файле
 * \param [in] findid - id сотрудника
-* \param [out]
-
 */
 void SearchSuperiorsOfTheDesiredEmployee(XMLElement* node, int findid)
 {
@@ -108,23 +123,11 @@ void SearchSuperiorsOfTheDesiredEmployee(XMLElement* node, int findid)
                 //Иначе
                 else
                 {
-                    //Если id=1, следовательно-это глава фирмы, искл.ситуация, вывод об ошибке
+                    //Если id=1, следовательно-это глава фирмы, 
                     if (id == 1) { cout << "No solution"; }
-                    ofstream fout; // объект класса ofstream
-                    fout.open("output.txt", std::ios::app);
-                    for (int i = headers.size() - 2; i >= 0; i--)
-                    {
-                        //Если сотрудник присутствует на рабочем месте, записываем его в выходной файл
-                        if (habsent[i])
-                        {
-                            //Записываем сотрудника в выходной файл
-                            fout << MatchingIdAndName(headers[i]) << endl;
-                        }
-                    }
-                    //Закрытие файла
-                    fout.close();
+                    SavingResultsToAFile();//Сохранение результатов в файл
                 }
-            }//if (!findid) { cout << "Invalid employee id. Perhaps it doesn't exist." << endl; }
+            }
         }
         //Рекурсивный вызов: для поиска искомого сотрудника в дочерних элементах
         SearchSuperiorsOfTheDesiredEmployee(node->FirstChildElement(), findid);
@@ -137,7 +140,7 @@ void SearchSuperiorsOfTheDesiredEmployee(XMLElement* node, int findid)
 
 }
 
-/*Получение id из txt-файла*/
+
 bool isdigit(string s)
 {
     for (int i = 0; i < s.length(); i++)
@@ -150,6 +153,8 @@ bool isdigit(string s)
     return true;
 
 }
+
+/*Получение id из txt-файла*/
 int GettingIdFromTxtFile(const char* file_txt)
 {
     string id_txt;
@@ -187,7 +192,7 @@ int GettingIdFromTxtFile(const char* file_txt)
     catch (int e)
     {
         if (e == 1) {cout << "Invalid input file specified. The file may not exist" << endl;}
-        if (e == 2) { cout << "Invalid file" << endl; }
+        if (e == 2) { cout << "Data entered incorrectly. The input string contains a set of different characters" << endl; }
 
     }
 }
